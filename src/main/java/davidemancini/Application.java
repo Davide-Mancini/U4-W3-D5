@@ -5,6 +5,7 @@ import davidemancini.dao.CatalogoDAO;
 import davidemancini.dao.PrestitiDAO;
 import davidemancini.dao.UtenteDAO;
 import davidemancini.entities.*;
+import davidemancini.exceptions.SceltaNonValida;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -92,7 +93,7 @@ private static final EntityManagerFactory emf = Persistence.createEntityManagerF
         //--------------------------------------------SCANNER-------------------------------------------------------------
         //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
-        while (true){
+        while (true) {
             System.out.println("Ciao! Cosa vuoi fare?");
             System.out.println("premi 1 per aggiungere un elemento nel catalogo");
             System.out.println("premi 2 per rimuovere un elemento dal catalogo");
@@ -102,87 +103,92 @@ private static final EntityManagerFactory emf = Persistence.createEntityManagerF
             System.out.println("premi 6 per vedere gli elementi attualmente in prestito tramite tessera utente");
             System.out.println("premi 7 per la ricerca dei prestiti scaduti e non riconsegnati");
             System.out.println("premi 0 per uscire");
-            int scelta = scanner.nextInt();
-            switch (scelta) {
-                case (1):
-                    System.out.println("cosa vuoi aggiungere? premi L per libro o R per rivista");
-                    scanner.nextLine();
-                    String sceltaLoR = scanner.nextLine();
-                    if (sceltaLoR.equals("L")) {
-                        System.out.println("inserisci titolo libro");
-                        String titolo = scanner.nextLine();
-                        System.out.println("inserisci numero pagine");
-                    int numPagine = scanner.nextInt();
-                    System.out.println("inserisci anno di pubblicazione");
-                    int annoDiPubblicazione = scanner.nextInt();
-                    System.out.println("inserisci autote");
-                    scanner.nextLine();
-                    String autore = scanner.nextLine();
-                    System.out.println("inserisci il genere del libro");
+            try {
+                int scelta = scanner.nextInt();
+                if (scelta > 7) {
+                    throw new SceltaNonValida(scelta);
+                }
 
-                    String genere = scanner.nextLine();
-                    Libri libroAggiunto = new Libri(titolo,numPagine,annoDiPubblicazione,autore,genere);
-                    catalogoDAO.save(libroAggiunto);
-                        System.out.println("libro aggiunto al catalogo");
-                    } else if (sceltaLoR.equals("R")){
-                        System.out.println("inserisci titolo della rivista");
-                        Periodicità valoreCasualePeriodicità2 = periodicità[random.nextInt(periodicità.length)];
-                        String titolo = scanner.nextLine();
-                        System.out.println("inserisci numero pagine");
-                        int numPagine = scanner.nextInt();
-                        System.out.println("inserisci anno di pubblicazione");
-                        int annoDiPubblicazione = scanner.nextInt();
-                        Riviste rivistaAggiunta = new Riviste(titolo,numPagine,annoDiPubblicazione,valoreCasualePeriodicità2);
-                        catalogoDAO.save(rivistaAggiunta);
-                        System.out.println("rivista aggiunta al catalogo");
-                    }
-                    break;
-                case (2):
-                    System.out.println("inserisci l'id dell'elemento che vuoi eliminare");
-                    scanner.nextLine();
-                    String idElementoDaEliminare = scanner.nextLine();
-                    catalogoDAO.findByIdAndDelete(idElementoDaEliminare);
-                    break;
-                case(3):
-                    System.out.println("inserisci l'anno di pubblicazione per la ricerca");
-                   int annoPubblicazionePerRicerca =  scanner.nextInt();
-                   List<Catalogo> ricercaConAnno1 = catalogoDAO.findByAnnoPubblicazione(annoPubblicazionePerRicerca);
-                    System.out.println("ecco il risultato della ricerca ");
-                    ricercaConAnno1.forEach(System.out::println);
-                    break;
-                case (4):
-                    System.out.println("inserisci l'autore per la ricerca");
-                    scanner.nextLine();
-                    String autoreRicerca = scanner.nextLine();
-                    List<Catalogo> recercaPerAutoreScanner = catalogoDAO.findByAutore(autoreRicerca);
-                    recercaPerAutoreScanner.forEach(System.out::println);
-                    break;
-                case (5):
-                    System.out.println("inserisci titolo o parte di esso per la ricerca");
-                    scanner.nextLine();
-                    String titoloRicerca= scanner.nextLine();
-                    List<Catalogo> ricercaPerTitoloOParteDiEssoScanner = catalogoDAO.findByTitleOParte(titoloRicerca);
-                    ricercaPerTitoloOParteDiEssoScanner.forEach(System.out::println);
-                    break;
-                case (6):
-                    System.out.println("insersci id dell'utente di cui vuoi vedere la lista di prestiti");
-                    int idUtentePrestiti = scanner.nextInt();
-                    List<Prestito> ricercaPerNumTesseraScanner =prestitiDAO.findByNumTessera(idUtentePrestiti);
-                    ricercaPerNumTesseraScanner.forEach(System.out::println);
-                    break;
-                case (7):
-                    System.out.println("ecco tutti i prestiti scaduti e non ancora restituiti");
-                    List<Prestito> prestitiScaduti = prestitiDAO.findByPrestitiScadutiNonRestituiti();
-                    prestitiScaduti.forEach(System.out::println);
-                    break;
-                case (0):
-                    break;
+                switch (scelta) {
+                    case (1):
+                        System.out.println("cosa vuoi aggiungere? premi L per libro o R per rivista");
+                        scanner.nextLine();
+                        String sceltaLoR = scanner.nextLine();
+                        if (sceltaLoR.equals("L")) {
+                            System.out.println("inserisci titolo libro");
+                            String titolo = scanner.nextLine();
+                            System.out.println("inserisci numero pagine");
+                            int numPagine = scanner.nextInt();
+                            System.out.println("inserisci anno di pubblicazione");
+                            int annoDiPubblicazione = scanner.nextInt();
+                            System.out.println("inserisci autote");
+                            scanner.nextLine();
+                            String autore = scanner.nextLine();
+                            System.out.println("inserisci il genere del libro");
 
+                            String genere = scanner.nextLine();
+                            Libri libroAggiunto = new Libri(titolo, numPagine, annoDiPubblicazione, autore, genere);
+                            catalogoDAO.save(libroAggiunto);
+                            System.out.println("libro aggiunto al catalogo");
+                        } else if (sceltaLoR.equals("R")) {
+                            System.out.println("inserisci titolo della rivista");
+                            Periodicità valoreCasualePeriodicità2 = periodicità[random.nextInt(periodicità.length)];
+                            String titolo = scanner.nextLine();
+                            System.out.println("inserisci numero pagine");
+                            int numPagine = scanner.nextInt();
+                            System.out.println("inserisci anno di pubblicazione");
+                            int annoDiPubblicazione = scanner.nextInt();
+                            Riviste rivistaAggiunta = new Riviste(titolo, numPagine, annoDiPubblicazione, valoreCasualePeriodicità2);
+                            catalogoDAO.save(rivistaAggiunta);
+                            System.out.println("rivista aggiunta al catalogo");
+                        }
+                        break;
+                    case (2):
+                        System.out.println("inserisci l'id dell'elemento che vuoi eliminare");
+                        scanner.nextLine();
+                        String idElementoDaEliminare = scanner.nextLine();
+                        catalogoDAO.findByIdAndDelete(idElementoDaEliminare);
+                        break;
+                    case (3):
+                        System.out.println("inserisci l'anno di pubblicazione per la ricerca");
+                        int annoPubblicazionePerRicerca = scanner.nextInt();
+                        List<Catalogo> ricercaConAnno1 = catalogoDAO.findByAnnoPubblicazione(annoPubblicazionePerRicerca);
+                        System.out.println("ecco il risultato della ricerca ");
+                        ricercaConAnno1.forEach(System.out::println);
+                        break;
+                    case (4):
+                        System.out.println("inserisci l'autore per la ricerca");
+                        scanner.nextLine();
+                        String autoreRicerca = scanner.nextLine();
+                        List<Catalogo> recercaPerAutoreScanner = catalogoDAO.findByAutore(autoreRicerca);
+                        recercaPerAutoreScanner.forEach(System.out::println);
+                        break;
+                    case (5):
+                        System.out.println("inserisci titolo o parte di esso per la ricerca");
+                        scanner.nextLine();
+                        String titoloRicerca = scanner.nextLine();
+                        List<Catalogo> ricercaPerTitoloOParteDiEssoScanner = catalogoDAO.findByTitleOParte(titoloRicerca);
+                        ricercaPerTitoloOParteDiEssoScanner.forEach(System.out::println);
+                        break;
+                    case (6):
+                        System.out.println("insersci id dell'utente di cui vuoi vedere la lista di prestiti");
+                        int idUtentePrestiti = scanner.nextInt();
+                        List<Prestito> ricercaPerNumTesseraScanner = prestitiDAO.findByNumTessera(idUtentePrestiti);
+                        ricercaPerNumTesseraScanner.forEach(System.out::println);
+                        break;
+                    case (7):
+                        System.out.println("ecco tutti i prestiti scaduti e non ancora restituiti");
+                        List<Prestito> prestitiScaduti = prestitiDAO.findByPrestitiScadutiNonRestituiti();
+                        prestitiScaduti.forEach(System.out::println);
+                        break;
+                    case (0):
+                        break;
 
-
-             }
-
-        }
+                }
+        }catch (SceltaNonValida ex){
+            System.out.println(ex.getMessage());
 
     }
-}
+            }
+
+}}
