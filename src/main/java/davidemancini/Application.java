@@ -6,6 +6,7 @@ import davidemancini.dao.PrestitiDAO;
 import davidemancini.dao.UtenteDAO;
 import davidemancini.entities.*;
 import davidemancini.exceptions.SceltaNonValida;
+import davidemancini.exceptions.StringaNonValida;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
@@ -111,9 +112,14 @@ private static final EntityManagerFactory emf = Persistence.createEntityManagerF
 
                 switch (scelta) {
                     case (1):
+
                         System.out.println("cosa vuoi aggiungere? premi L per libro o R per rivista");
+                        try {
                         scanner.nextLine();
                         String sceltaLoR = scanner.nextLine();
+                        if (!sceltaLoR.equals("L")&& !sceltaLoR.equals("R")){
+                            throw new StringaNonValida(sceltaLoR);
+                        }
                         if (sceltaLoR.equals("L")) {
                             System.out.println("inserisci titolo libro");
                             String titolo = scanner.nextLine();
@@ -143,6 +149,10 @@ private static final EntityManagerFactory emf = Persistence.createEntityManagerF
                             System.out.println("rivista aggiunta al catalogo");
                         }
                         break;
+                        }catch (StringaNonValida ex){
+                            System.out.println(ex.getMessage());
+                            break;
+                        }
                     case (2):
                         System.out.println("inserisci l'id dell'elemento che vuoi eliminare");
                         scanner.nextLine();
