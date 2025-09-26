@@ -1,6 +1,8 @@
 package davidemancini.entities;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 
 import java.time.LocalDate;
@@ -9,6 +11,7 @@ import java.util.UUID;
 @Table(name = "riviste")
 public class Riviste extends Catalogo{
     //ATTRIBUTI
+    @Enumerated(EnumType.STRING) //COSI ANCHE NEL DB C'è IL VALORE DELL'ENUM E NON OSLO IL SUO INDICE
     private Periodicità periodicità;
     //COSTRUTTORI
     public Riviste(){}
