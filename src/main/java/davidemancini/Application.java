@@ -48,10 +48,13 @@ private static final EntityManagerFactory emf = Persistence.createEntityManagerF
 
 //        Utente utente1 = new Utente(faker.name().firstName(),faker.name().lastName(),LocalDate.of(random.nextInt(1925,2015),random.nextInt(1,12), random.nextInt(1,28) ));
 //        Libri libro1 = new Libri(faker.book().title(),random.nextInt(50,500), random.nextInt(1970,2025),faker.book().author(),faker.book().genre());
+
        //RECUPERO UN LIBRO GIA PRESENTRE NEL DB TRAMITE IL SUO ID COSI CHE POSSA INSERIRLO NEL PRESTITO
-//        Catalogo libroFromDB = catalogoDAO.findById("4ba74577-fdfb-4fcd-b09c-b997f6f8cf78");
+//       Catalogo libroFromDB = catalogoDAO.findById("aa8bec9a-3a85-4d01-af7e-745896c71f9b");
+
         //RECUPERO UN UTENTE GIA PRESENTRE NEL DB TRAMITE IL SUO ID COSI CHE POSSA INSERIRLO NEL PRESTITO
-        Utente utenteFromDB = utenteDAO.findById(2);
+//        Utente utenteFromDB = utenteDAO.findById(6);
+
         //CREO UN NUOVO PRESTITO CON IL LIBRO E L'UTENTE RECUPERATO DAL DB TRAMITE IL LORO ID
 //        Prestito prestito1 = new Prestito(utenteFromDB,libroFromDB,LocalDate.now(),LocalDate.now().plusDays(30),LocalDate.of(random.nextInt(2025,2026),random.nextInt(10,12), random.nextInt(1,28) ));
 //       prestitiDAO.save(prestito1);
